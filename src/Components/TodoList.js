@@ -61,20 +61,35 @@ class TodoList extends React.Component {
     });
   };
 
+  buttonList = [
+    {
+      value: "all",
+      active: true
+    },
+    {
+      value: "active",
+      active: false
+    },
+    {
+      value: "completed",
+      active: false
+    }
+  ];
+
   render() {
     let todosTobeRendered = [];
-    let classNamea = "midbtn";
-    let classNameb = "midbtn";
-    let classNamec = "midbtn";
     if (this.state.todoToShow === "all") {
       todosTobeRendered = this.state.todos;
-      classNamea += " select";
+      this.buttonList[0].active = true;
+      // classNamea += " select";
     } else if (this.state.todoToShow === "active") {
       todosTobeRendered = this.state.todos.filter((todo) => !todo.complete);
-      classNameb += " select";
+      // classNameb += " select";
+      this.buttonList[1].active = true;
     } else if (this.state.todoToShow === "complete") {
       todosTobeRendered = this.state.todos.filter((todo) => todo.complete);
-      classNamec += " select";
+      // classNamec += " select";
+      this.buttonList[2].active = true;
     }
     return (
       <div>
@@ -101,27 +116,15 @@ class TodoList extends React.Component {
             left
           </div>
           <div className="firstthree">
-            <button
-              value="All"
-              className={classNamea}
-              onClick={(e) => this.update(e, "all")}
-            >
-              All
-            </button>
-            <button
-              value="Active"
-              className={classNameb}
-              onClick={(e) => this.update(e, "active")}
-            >
-              Active
-            </button>
-            <button
-              value="Completed"
-              className={classNamec}
-              onClick={(e) => this.update(e, "complete")}
-            >
-              Completed
-            </button>
+            {console.log(this.buttonList[0].value)}
+            {this.buttonList.map((filterButton) => (
+              <button
+                className={`midbtn ${filterButton.active && "select"}`}
+                onClick={(e) => this.update(e, filterButton.value)}
+              >
+                {filterButton.value.toUpperCase()}
+              </button>
+            ))}
           </div>
           <div className="last">
             <button className="glow-on-hover" onClick={this.deleteAllComplete}>
