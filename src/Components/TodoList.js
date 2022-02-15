@@ -71,25 +71,43 @@ class TodoList extends React.Component {
       active: false
     },
     {
-      value: "completed",
+      value: "complete",
       active: false
     }
   ];
+  applyFilter = (e, filterValue) => {
+    this.setState({ todoToShow: filterValue });
+  };
 
   render() {
     let todosTobeRendered = [];
+
     if (this.state.todoToShow === "all") {
       todosTobeRendered = this.state.todos;
-      this.buttonList[0].active = true;
-      // classNamea += " select";
+      this.buttonList = this.buttonList.map((list) => {
+        console.log(list);
+        let value = list.value;
+        let active = list.value === "all";
+        console.log(value, active, this.state.todoToShow);
+        return { value, active };
+      });
     } else if (this.state.todoToShow === "active") {
       todosTobeRendered = this.state.todos.filter((todo) => !todo.complete);
-      // classNameb += " select";
-      this.buttonList[1].active = true;
+
+      this.buttonList = this.buttonList.map((list) => {
+        console.log(list);
+        let value = list.value;
+        let active = list.value === "active";
+        return { value, active };
+      });
     } else if (this.state.todoToShow === "complete") {
       todosTobeRendered = this.state.todos.filter((todo) => todo.complete);
-      // classNamec += " select";
-      this.buttonList[2].active = true;
+
+      this.buttonList = this.buttonList.map((list) => {
+        let value = list.value;
+        let active = list.value === "complete";
+        return { value, active };
+      });
     }
     return (
       <div>
@@ -117,14 +135,17 @@ class TodoList extends React.Component {
           </div>
           <div className="firstthree">
             {console.log(this.buttonList[0].value)}
-            {this.buttonList.map((filterButton) => (
-              <button
-                className={`midbtn ${filterButton.active && "select"}`}
-                onClick={(e) => this.update(e, filterButton.value)}
-              >
-                {filterButton.value.toUpperCase()}
-              </button>
-            ))}
+            {this.buttonList.map((filterButton) => {
+              console.log(filterButton);
+              return (
+                <button
+                  className={`midbtn ${filterButton.active && "select"}`}
+                  onClick={(e) => this.applyFilter(e, filterButton.value)}
+                >
+                  {filterButton.value.toUpperCase()}
+                </button>
+              );
+            })}
           </div>
           <div className="last">
             <button className="glow-on-hover" onClick={this.deleteAllComplete}>
